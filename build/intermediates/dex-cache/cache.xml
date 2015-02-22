@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/pre-dexed/debug/classes-d849a7d9e21d2ec7bf8f50569fe23862d5c43745.jar" />
+    </item>
+    <item
+        jar="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/pre-dexed/debug/classes-58c8d76039b9ac0cfcd385cc7a008852f571ac80.jar" />
+    </item>
+    <item
+        jar="/Users/Sean/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-2d6fd311b97faeb2801a1c11a7ab768b3ad3a682.jar" />
+    </item>
+    <item
+        jar="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/exploded-aar/HelloWorld/yWeatherGetter4a/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c616481e87bc0cf466a148ecb8ec3d53c9dc1a39">
+        <dex dex="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/pre-dexed/debug/classes-2b5e07b6f271dcf29bb96deccb288a9a9388338a.jar" />
+    </item>
+    <item
+        jar="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/Sean/AndroidStudioProjects/HelloWorld/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-6f0edea0a972022bd8c5a670217b7f69f5cc1cba.jar" />
+    </item>
+
+</items>

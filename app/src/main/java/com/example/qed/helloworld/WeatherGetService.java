@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -56,18 +57,20 @@ public class WeatherGetService extends Service implements YahooWeatherInfoListen
             Log.d(TAG, "Wind Speed: " + weatherInfo.getWindSpeed());
             //THE DAY
             Log.d(TAG, "Day: " + weatherInfo.getForecastInfo1().getForecastDay());
-
+            Log.d(TAG, "Day2: " + weatherInfo.getForecastInfo2().getForecastDate());
 
             //CURRENT TEMPERATURE
             Log.d(TAG, "Current Temperature: " + weatherInfo.getCurrentTempC());
 
-            int forecastCode= weatherInfo.getForecastInfo1().getForecastCode();
+            int forecastCode = weatherInfo.getForecastInfo1().getForecastCode();
             String drawable = "rain";
-
+            int c = Color.argb(255, 255, 255, 255);
+            String background_image=null;
             switch(forecastCode)
             {
                 case 0:
                     drawable="tornado";
+                    c = Color.parseColor("#FF9E80");
                     break;
                 case 1:
                 case 2:
@@ -75,8 +78,8 @@ public class WeatherGetService extends Service implements YahooWeatherInfoListen
                 case 4:
                 case 45:
                     drawable="tstorm";
+                    c = Color.parseColor("#9E9E9E");
                     break;
-
                 case 5:
                 case 6:
                 case 7:
@@ -90,8 +93,9 @@ public class WeatherGetService extends Service implements YahooWeatherInfoListen
                 case 43:
                 case 46:
                     drawable="snow";
+                   // c = Color.parseColor("#B0BEC5");
+                    background_image="http://upload.wikimedia.org/wikipedia/commons/0/0b/Shadows_on_snow.jpg";
                     break;
-
                 case 8:
                 case 9:
                 case 10:
@@ -99,10 +103,11 @@ public class WeatherGetService extends Service implements YahooWeatherInfoListen
                 case 12:
                 case 35:
                     drawable="rain";
-
+                    c = Color.parseColor("#4DB6AC");
                     break;
                 case 17:
                     drawable="hail";
+                    c = Color.parseColor("#B0BEC5");
                     break;
                 case 19:
                 case 20:
@@ -110,48 +115,65 @@ public class WeatherGetService extends Service implements YahooWeatherInfoListen
                 case 22:
                 case 23:
                     drawable="fog";
+                    c = Color.parseColor("#9E9E9E");
                     break;
                 case 24:
                     drawable="wind";
+                    c = Color.parseColor("#F48FB1");
                     break;
                 case 25:
                     drawable="cold";
+                    c = Color.parseColor("#F48FB1");
                     break;
                 case 26:
                 case 44:
-                    drawable="cloud";
+                    drawable="cloud";//updated
+                   // c = Color.parseColor("#BDBDBD");
+                    background_image="http://upload.wikimedia.org/wikipedia/commons/6/63/Cloud_over_mountain_in_Switzerland.JPG";
                     break;
                 case 27:
                 case 29:
-                    drawable="cloudnight";
+                    drawable="cloudnight";//Replaced
+                    //c = Color.parseColor("#757575");
+                    background_image="http://upload.wikimedia.org/wikipedia/commons/6/63/Cloud_over_mountain_in_Switzerland.JPG";
                     break;
                 case 28:
                 case 30:
-                    drawable="cloudday";
+                    drawable="cloudday";//replaced
+                    //c = Color.parseColor("#757575");
+                    background_image="http://upload.wikimedia.org/wikipedia/commons/6/63/Cloud_over_mountain_in_Switzerland.JPG";
                     break;
                 case 31:
                 case 33:
                     drawable="night";
+                    c = Color.parseColor("#616161");
                     break;
                 case 32:
                 case 34:
                     drawable="sun";
+                    c = Color.parseColor("#7986CB");
+
                     break;
                 case 36:
                     drawable="hot";
+                    c = Color.parseColor("#7986CB");
                     break;
 
                 case 37:
                 case 38:
                 case 39:
                 case 47:
-                    drawable="scatteredthunder";
+                    drawable = "scatteredthunder";
+                    c = Color.parseColor("#EF9A9A");
                     break;
                 case 40:
-                    drawable="scatteredrain";
+                    drawable = "scatteredrain";
+                    c = Color.parseColor("#B388FF");
                     break;
 
-                default: drawable="error";
+                default:
+                    drawable = "error";
+                    c = Color.argb(255, 255, 255, 255);
                     break;
             }
 
@@ -169,20 +191,40 @@ public class WeatherGetService extends Service implements YahooWeatherInfoListen
 //weather status,  degrees
 
 
-            String title= weatherInfo.getConditionTitle();
-            String description=", Weather Status: "+weatherInfo.getForecastInfo1().getForecastText()+", Temp (C): "+
-                    weatherInfo.getCurrentTempC()+" High Temp: "+weatherInfo.getForecastInfo1().getForecastTempHighC()
-                    +", Low Temp: "+weatherInfo.getForecastInfo1().getForecastTempLowC();
-            String spoken="The expected weather is "+weatherInfo.getForecastInfo1().getForecastText()+
-                    " and the current temperature is "+ weatherInfo.getCurrentTempC();
+            String title = weatherInfo.getLocationCity() + ", "+ weatherInfo.getCurrentTempC() + "C " +"\n" + weatherInfo.getForecastInfo1().getForecastText();
+            String description = weatherInfo.getForecastInfo1().getForecastTempHighC() + "C high, "
+                    + weatherInfo.getForecastInfo1().getForecastTempLowC() + "C low";
+
+
+
+            String spoken = "Today's weather for " + weatherInfo.getLocationCity() + " is " +weatherInfo.getForecastInfo1().getForecastText() +
+                    ". The temperature is " + weatherInfo.getCurrentTempC() + "degrees, with a high of " + weatherInfo.getForecastInfo1().getForecastTempHighC() + "degrees, and a "
+                    + "low of " + weatherInfo.getForecastInfo1().getForecastTempLowC() + "degrees.";
+            String more_title[] = new String[]{ "Wind Chill", "Wind Speed"};
+            String more_description[] = new String[]{ weatherInfo.getWindChill() + "C", weatherInfo.getWindSpeed() + "km/h" };
+
+            Log.d(TAG, "Title: " + title);
+            Log.d(TAG, "Description: " + description);
+            Log.d(TAG, "Spoken: " + spoken);
+            Log.d(TAG, "More title: " + more_title);
+            Log.d(TAG, "More description: " + more_description);
+            Log.d(TAG, "Drawable: " + drawable);
+            Log.d(TAG, "Background color: " + c);
 
             Intent sendIntent = new Intent();
             sendIntent.setAction("com.hack.morningpal.FOUND_DATA");
             sendIntent.putExtra("title", title);
             sendIntent.putExtra("sender_package", getPackageName());
-            sendIntent.putExtra("description",description );
+            sendIntent.putExtra("description", description);
             sendIntent.putExtra("icon_name", drawable);
+            sendIntent.putExtra("more_title", more_title);
+            sendIntent.putExtra("more_description", more_description);
             sendIntent.putExtra("spoken_phrase", spoken);
+
+            if(background_image==null) {
+                sendIntent.putExtra("background_color", c);
+            }
+            sendIntent.putExtra("background_name", background_image);
             sendBroadcast(sendIntent);
             this.stopSelf();
         }
