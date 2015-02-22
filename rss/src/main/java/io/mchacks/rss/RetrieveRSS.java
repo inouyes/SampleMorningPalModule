@@ -81,9 +81,11 @@ public class RetrieveRSS extends Service {
 
             ArrayList<RssItem> rssItems = feed.getRssItems();
             StringBuilder list = new StringBuilder();
-            for(RssItem rssItem : rssItems) {
-                Log.i("RSS Reader", rssItem.getTitle());
-                list.append(rssItem.getTitle()).append("\n");
+
+            // Show no more than 5 headlines
+            int size = rssItems.size() > 5 ? 5 : rssItems.size();
+            for(int i = 0; i < size; i++) {
+                list.append(rssItems.get(i).getTitle()).append("\n");
             }
             return list.toString();
         }
@@ -100,6 +102,8 @@ public class RetrieveRSS extends Service {
             sendIntent.putExtra("spoken_phrase", "Good morning! Here are this morning's headlines. " + result);
 
             sendBroadcast(sendIntent);
+
+            service.stopSelf();
         }
     }
 }

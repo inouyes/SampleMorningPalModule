@@ -56,8 +56,8 @@ public class TrafficGetService extends Service {
 
     private void startTrafficQuery() {
 
-        double latitude = 50;
-        double longitude = 50;
+        double latitude = -41;
+        double longitude = -110;
 
         String coordinates =
                 (latitude - 5) + ","
@@ -65,7 +65,7 @@ public class TrafficGetService extends Service {
                         + (latitude + 5) + ","
                         + (longitude + 5);
 
-//        coordinates = "37,-105,45,-94";
+        coordinates = "37,-105,45,-94";
 
         if (isNetworkAvailable()) {
             Log.d("Network", "Network available");
@@ -117,7 +117,6 @@ public class TrafficGetService extends Service {
                 input = response.getEntity().getContent();
                 if (input != null) {
 
-                    Log.d("Json Post Execute 22", "Executing");
                     // read the input into a string
                     BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                     String line = "";
