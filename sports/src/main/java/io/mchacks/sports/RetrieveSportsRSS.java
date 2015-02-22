@@ -132,8 +132,8 @@ public class RetrieveSportsRSS extends Service {
             sendIntent.putExtra("background_name", "http://corrupteddevelopment.com/wp-content/uploads/2013/08/blue-globe-icon.jpg");
             sendIntent.putExtra("spoken_phrase",
                     this.category == "news" ?
-                    "Good morning! Here are this morning's headlines. " + result[0].getTitle()
-                    : "Good morning! Here are the latest sports updates. " + result[0].getTitle()
+                    "Today's headlines are: " + result[0].getTitle()
+                    : "Today's sports updates are:  " + result[0].getTitle()
             );
 
             // new array removing the first item

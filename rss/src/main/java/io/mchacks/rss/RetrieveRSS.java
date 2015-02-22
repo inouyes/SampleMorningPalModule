@@ -30,7 +30,20 @@ public class RetrieveRSS extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        retrieveRSS("http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml");
+        retrieveRSS("http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml", "news");
+        //retrieveRSS("http://api.foxsports.com/v1/rss?partnerKey=zBaFxRyGKCfxBagJG9b8pqLyndmvo7UU", "sports");
+
+
+
+        return START_NOT_STICKY;
+
+
+    }
+
+    private void retrieveRSS(String rss, String category) {
+
+        String[] params = {rss, category};
+        new JsonAsyncTask(this).execute(params);
 
         Intent i = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 1, i, 0);
@@ -43,19 +56,33 @@ public class RetrieveRSS extends Service {
                 .build();
 
         startForeground(500, n);
-        return START_NOT_STICKY;
-
-
     }
 
-    private void retrieveRSS(String rss) {
+    /**
+     * Each news item from the feed
+     */
+    public class NewsItem {
+        private String title;
+        private String content;
 
-        new JsonAsyncTask(this).execute(rss);
+        public NewsItem(String title, String content) {
+            this.title = title;
+            this.content = content;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 
-    public class JsonAsyncTask extends AsyncTask<String, String, String> {
+    public class JsonAsyncTask extends AsyncTask<String, String, NewsItem[]> {
 
         RetrieveRSS service;
+        String category;
 
         public JsonAsyncTask(RetrieveRSS service) {
             this.service = service;
@@ -67,11 +94,12 @@ public class RetrieveRSS extends Service {
 
         }
         @Override
-        protected String doInBackground(String... urls) {
+        protected NewsItem[] doInBackground(String... params) {
+            category = params[1];
             URL url = null;
             RssFeed feed = null;
             try {
-                url = new URL(urls[0]);
+                url = new URL(params[0]);
                 feed = RssReader.read(url);
             } catch (SAXException e) {
                 e.printStackTrace();
@@ -80,26 +108,45 @@ public class RetrieveRSS extends Service {
             }
 
             ArrayList<RssItem> rssItems = feed.getRssItems();
-            StringBuilder list = new StringBuilder();
 
             // Show no more than 5 headlines
             int size = rssItems.size() > 5 ? 5 : rssItems.size();
+
+            NewsItem[] list = new NewsItem[size];
             for(int i = 0; i < size; i++) {
-                list.append(rssItems.get(i).getTitle()).append("\n");
+                NewsItem news = new NewsItem(rssItems.get(i).getTitle(), rssItems.get(i).getDescription());
+                list[i] = news;
             }
-            return list.toString();
+            return list;
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(NewsItem[] result) {
             Intent sendIntent = new Intent();
             sendIntent.setAction("com.hack.morningpal.FOUND_DATA");
 
-            sendIntent.putExtra("title", "Morning News");
+            sendIntent.putExtra("title", result[0].getTitle());
             sendIntent.putExtra("sender_package", getPackageName());
-            sendIntent.putExtra("description", result);
-            sendIntent.putExtra("icon_name", "news");
-            sendIntent.putExtra("spoken_phrase", "Good morning! Here are this morning's headlines. " + result);
+            sendIntent.putExtra("description", result[0].getContent());
+            sendIntent.putExtra("icon_name", this.category);
+            sendIntent.putExtra("background_name", "http://corrupteddevelopment.com/wp-content/uploads/2013/08/blue-globe-icon.jpg");
+            sendIntent.putExtra("spoken_phrase",
+                    this.category == "news" ?
+                            "Today's headlines are: " + result[0].getTitle()
+                            : "Today's sports updates are:  " + result[0].getTitle()
+            );
+
+
+            // new array removing the first item
+            String[] names = new String[result.length - 1];
+            String[] descriptions = new String[result.length - 1];
+            for (int i = 1; i < result.length; i++) {
+                names[i - 1] = result[i].getTitle();
+                descriptions[i - 1] = result[i].getContent();
+            }
+
+            sendIntent.putExtra("more_title", names);
+            sendIntent.putExtra("more_description", descriptions);
 
             sendBroadcast(sendIntent);
 

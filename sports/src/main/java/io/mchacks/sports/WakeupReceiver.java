@@ -10,6 +10,6 @@ public class WakeupReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context, RetrieveRSS.class));
+        context.startService(new Intent(context, RetrieveSportsRSS.class));
     }
 }
